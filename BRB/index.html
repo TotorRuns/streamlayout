@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    .brb-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      font-size: 64px; /* Increase the font size */
+    }
+
+    .brb-text {
+      margin-bottom: 30px;
+    }
+
+    .canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="brb-container">
+    <div class="brb-text">BRB</div>
+  </div>
+  <div class="canvas-container">
+    <canvas id="linesCanvas"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('linesCanvas');
+    const ctx = canvas.getContext('2d');
+    const canvasWidth = window.innerWidth;
+    const canvasHeight = window.innerHeight;
+    const numLines = 100;
+    const lineWidth = 2;
+    const lineSpeed = 2;
+    let lines = [];
+
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    for (let i = 0; i < numLines; i++) {
+      lines.push({
+        x: Math.random() * canvasWidth,
+        y: Math.random() * canvasHeight,
+        length: Math.random() * canvasHeight / 2 + 50,
+        angle: Math.random() * 360,
+        speed: Math.random() * lineSpeed + 0.5,
+        color: getRandomColor(),
+      });
+    }
+
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function drawLines() {
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      lines.forEach(line => {
+        const radians = line.angle * Math.PI / 180;
+        const x2 = line.x + Math.cos(radians) * line.length;
+        const y2 = line.y + Math.sin(radians) * line.length;
+
+        ctx.beginPath();
+        ctx.moveTo(line.x, line.y);
+        ctx.lineTo(x2, y2);
+        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = line.color;
+        ctx.stroke();
+
+        line.x += Math.cos(radians) * line.speed;
+        line.y += Math.sin(radians) * line.speed;
+
+        if (line.x > canvasWidth || line.x < 0 || line.y > canvasHeight || line.y < 0) {
+          line.x = Math.random() * canvasWidth;
+          line.y = Math.random() * canvasHeight;
+        }
+      });
+
+      requestAnimationFrame(drawLines);
+    }
+
+    drawLines();
+  </script>
+</body>
+</html>
+

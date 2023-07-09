@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #gameWindow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      outline: 2px solid transparent;
+    }
+
+    #facecam {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 25%;
+      height: 25%;
+      outline: 2px solid transparent;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameWindow"></div>
+  <div id="facecam"></div>
+
+  <script>
+    const gameWindow = document.getElementById('gameWindow');
+    const facecam = document.getElementById('facecam');
+    let hue = 0;
+    let direction = 1;
+    const colorStep = 1; // Adjust this value for faster or slower color transition
+
+    function fadeOutline(element) {
+      hue += direction * colorStep;
+
+      if (hue >= 360 || hue <= 0) {
+        direction *= -1;
+      }
+
+      element.style.outlineColor = `hsl(${hue}, 100%, 50%)`;
+
+      requestAnimationFrame(() => fadeOutline(element));
+    }
+
+    fadeOutline(gameWindow);
+    fadeOutline(facecam);
+  </script>
+</body>
+</html>

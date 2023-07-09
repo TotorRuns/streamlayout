@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #gameWindowContainer {
+      display: flex;
+      height: 100vh;
+    }
+
+    #gameWindowBig {
+      flex: 1;
+      outline: 2px solid transparent;
+    }
+
+    #gameWindowSmall {
+      flex: 0.4;
+      outline: 2px solid transparent;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameWindowContainer">
+    <div id="gameWindowBig">
+      <canvas id="gameCanvasBig"></canvas>
+    </div>
+    <div id="gameWindowSmall">
+      <canvas id="gameCanvasSmall"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const gameWindowBig = document.getElementById('gameWindowBig');
+    const gameWindowSmall = document.getElementById('gameWindowSmall');
+    let hue = 0;
+    let direction = 1;
+    const colorStep = 1; // Adjust this value for faster or slower color transition
+
+    function fadeOutline(element) {
+      hue += direction * colorStep;
+
+      if (hue >= 360 || hue <= 0) {
+        direction *= -1;
+      }
+
+      element.style.outlineColor = `hsl(${hue}, 100%, 50%)`;
+
+      requestAnimationFrame(() => fadeOutline(element));
+    }
+
+    fadeOutline(gameWindowBig);
+    fadeOutline(gameWindowSmall);
+  </script>
+</body>
+</html>
